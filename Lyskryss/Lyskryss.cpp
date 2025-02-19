@@ -140,8 +140,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static list<int> yPos;
     static list<int> xPos;
 
-    static int xCar = 50;
-    static int yCar = 50;
+    static int pw = 50;
+    static int pn = 50;
 
     static int totalCars = 0;
     
@@ -163,12 +163,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_TIMER:
         if (wParam == timerIDSpawnCars) {
             random = rand() % 101;
-            if (random < yCar) {
+            if (random < pn) {
                 yPos.push_front(y);
                 totalCars++;
             }
 
-            if (random < xCar) {
+            if (random < pw) {
                 xPos.push_front(x);
                 totalCars++;
             }
@@ -226,23 +226,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_KEYDOWN:
         switch (wParam) {
         case VK_UP:
-            if (yCar < 100) {
-                yCar+=10;
+            if (pn < 100) {
+                pn+=10;
             }
             break;
         case VK_DOWN:
-            if (yCar > 0) {
-                yCar-=10;
+            if (pn > 0) {
+                pn-=10;
             }
             break;
         case VK_LEFT:
-            if (xCar < 100) {
-                xCar-=10;
+            if (pw > 0) {
+                pw-=10;
             }
             break;
         case VK_RIGHT:
-            if (xCar > 0) {
-                xCar+=10;
+            if (pw < 100) {
+                pw+=10;
             }
             break;
         }
@@ -297,8 +297,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         wchar_t xBuffer[32];
         wchar_t carsBuffer[32];
         
-        wsprintf(yBuffer, L"%d%%", yCar);
-        wsprintf(xBuffer, L"%d%%", xCar);
+        wsprintf(yBuffer, L"%d%%", pn);
+        wsprintf(xBuffer, L"%d%%", pw);
         wsprintf(carsBuffer, L"Total Cars: %d", totalCars);
         
         TextOut(hdc, 390, 20, yBuffer, wcslen(yBuffer));
