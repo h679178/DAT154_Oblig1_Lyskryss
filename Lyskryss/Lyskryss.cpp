@@ -158,8 +158,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         timerIDtrafficLight = SetTimer(hWnd, 0, 3000, 0); //Trafikklys ID = 0;
         timerIDCAR = SetTimer(hWnd, 1, 100, 0); //Bil ID = 1;
         timerIDSpawnCars = SetTimer(hWnd, 2, 1000, 0); //Spawn ID = 2;
-
         break;
+
     case WM_TIMER:
         if (wParam == timerIDSpawnCars) {
             random = rand() % 101;
@@ -221,8 +221,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             
             InvalidateRect(hWnd, 0, 1);
         }
-        
         break;
+
     case WM_KEYDOWN:
         switch (wParam) {
         case VK_UP:
@@ -230,46 +230,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 pn+=10;
             }
             break;
+
         case VK_DOWN:
             if (pn > 0) {
                 pn-=10;
             }
             break;
+
         case VK_LEFT:
             if (pw > 0) {
                 pw-=10;
             }
             break;
+
         case VK_RIGHT:
             if (pw < 100) {
                 pw+=10;
             }
             break;
         }
-        
-    //case WM_LBUTTONDOWN:
-    //{
-    //    if (yCar < 100) {
-    //        yCar++;
-    //        xCar--;
-    //    }
-
-    //    InvalidateRect(hWnd, 0, 1);
-
-    //    break;
-    //}
-    //case WM_RBUTTONDOWN:
-    //{
-    //    if (xCar < 100) {
-    //        xCar++;
-    //        yCar--;
-    //    }
-
-    //    InvalidateRect(hWnd, 0, 1);
-
-    //    break;
-    //}
         break;
+
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
