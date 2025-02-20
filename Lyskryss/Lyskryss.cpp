@@ -8,7 +8,6 @@
 #include <string>
 #include <cstdlib>
 
-
 using namespace std;
 
 #define MAX_LOADSTRING 100
@@ -136,17 +135,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     UINT_PTR timerIDCAR = 1;
     UINT_PTR timerIDSpawnCars = 2;
    
+    RECT client;
+    GetClientRect(hWnd, &client);
 
-    static list<int> yPos;
-    static list<int> xPos;
+    RECT xVei = { client.left, client.bottom / 2 - 50, client.right, client.bottom / 2 + 50 }; // vei x akse koordinater
+    RECT yVei = { client.right / 2 - 50, client.top, client.right / 2 + 50, client.bottom }; // vei y akse kooridnater
+
+    RECT xLys = { yVei.left - 75, xVei.bottom, yVei.left, xVei.bottom + 25 }; // lys til x aksen
+    RECT yLys = { yVei.left - 25, xVei.top - 75, yVei.left, xVei.top }; // lys til y aksen
+
+    static list<int> yCars;
+    static list<int> xCars;
 
     static int pw = 50;
     static int pn = 50;
 
     static int totalCars = 0;
     
-    static int y = -50;
-    static int x = 0;
+    static int yStartPos = -50;
+    static int xStartPos = -50;
 
     static int trafficState = 0;
    
@@ -164,12 +171,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         if (wParam == timerIDSpawnCars) {
             random = rand() % 101;
             if (random < pn) {
-                yPos.push_front(y);
+                yCars.push_front(yStartPos);
                 totalCars++;
             }
 
             if (random < pw) {
-                xPos.push_front(x);
+                xCars.push_front(xStartPos);
                 totalCars++;
             }
         }
@@ -192,12 +199,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             InvalidateRect(hWnd, 0, 1);
         }
         else if (wParam == timerIDCAR) {
-            for (auto it = xPos.begin(); it != xPos.end(); ++it) {
-
-                if (*it > 370 && *it < 390 && trafficState != 0) {
+            for (auto it = xCars.begin(); it != xCars.end(); ++it) {
+                
+                if (*it > yVei.left - 40 && *it < yVei.left - 20 && trafficState != 0) {
                 }
                 else {
-                    if (next(it) != xPos.end() && (*next(it) - *it < 50)) {           
+                    if (next(it) != xCars.end() && (*next(it) - *it < 50)) {           
                     }
                     else {
                         *it += 5;
@@ -205,12 +212,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     }
                 
             }
-            for (auto it = yPos.begin(); it != yPos.end(); ++it) {
-                if (*it > 130 && *it < 150 && trafficState != 3) {
+            for (auto it = yCars.begin(); it != yCars.end(); ++it) {
+                if (*it > xVei.top - 40 && *it < xVei.top - 20 && trafficState != 3) {
 
                 }
                 else {
-                    if (next(it) != yPos.end() && *next(it) - *it < 50) {
+                    if (next(it) != yCars.end() && *next(it) - *it < 50) {
 
                     }
                     else {
@@ -261,19 +268,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         HBRUSH gul = CreateSolidBrush(RGB(255, 255, 0));
         HBRUSH gronn = CreateSolidBrush(RGB(0, 255, 0));
         HBRUSH blank = CreateSolidBrush(RGB(0, 0, 0));
-
-        Rectangle(hdc, 400, 100, 425, 175); //Trafikklys y akse
-        Rectangle(hdc, 350, 275, 425, 300); //trafiklys x akse
-
-        RECT xVei = { 0,175,2000,275 }; // vei x akse koordinater
-        RECT yVei = { 425,0,525,1000 }; // vei y akse kooridnater
         
         Rectangle(hdc, xVei.left, xVei.top, xVei.right, xVei.bottom); //tegner horisontal vei langs x akse
         Rectangle(hdc, yVei.left, yVei.top, yVei.right, yVei.bottom); //tegner vertikal vei langs y akse
 
+        Rectangle(hdc, xLys.left, xLys.top, xLys.right, xLys.bottom); //trafikklys x akse
+        Rectangle(hdc, yLys.left, yLys.top, yLys.right, yLys.bottom); //trafikklys y akse
+
         HGDIOBJ hOrg = SelectObject(hdc,blank);
 
-        //int a = 16;
         wchar_t yBuffer[32];
         wchar_t xBuffer[32];
         wchar_t carsBuffer[32];
@@ -282,154 +285,160 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         wsprintf(xBuffer, L"%d%%", pw);
         wsprintf(carsBuffer, L"Total Cars: %d", totalCars);
         
-        TextOut(hdc, 390, 20, yBuffer, wcslen(yBuffer));
-        TextOut(hdc, 20, 150, xBuffer, wcslen(xBuffer));
+        TextOut(hdc, yVei.left-50, client.top+20, yBuffer, wcslen(yBuffer));
+        TextOut(hdc, client.left+20, xVei.top-30, xBuffer, wcslen(xBuffer));
         TextOut(hdc, 20, 20, carsBuffer, wcslen(carsBuffer));
         
 
         //itererer gjennom lista og tegner rektangel(bil).
-        for (int& x : xPos) {
-            Rectangle(hdc, x, 230, x + 30, 250); //Tegner/flytter bil på x akse.
+        for (int& x : xCars) {
+            Rectangle(hdc, x, client.bottom/2+5, x + 30, client.bottom/2+25); //Tegner/flytter bil på x akse.
         }
-        for (int& y : yPos) {
-            Rectangle(hdc, 450, y, 470, y + 30); //tegner/flytter bil på y akse.
+        for (int& y : yCars) {
+            Rectangle(hdc, client.right/2-25, y, client.right/2-5, y + 30); //tegner/flytter bil på y akse.
         }
+
+        RECT yRed = { yLys.left, yLys.top, yLys.left + 25, yLys.top + 25 };
+        RECT yYellow = {yLys.left, yLys.top + 25, yLys.left + 25, yLys.top + 50};
+        RECT yGreen = {yLys.left, yLys.top + 50, yLys.left + 25, yLys.bottom};
+
+        RECT xRed = {xLys.left, xLys.top, xLys.left + 25, xLys.bottom};
+        RECT xYellow = {xLys.left + 25, xLys.top, xLys.left + 50, xLys.bottom};
+        RECT xGreen = { xLys.left + 50, xLys.top, xLys.right, xLys.bottom };
 
         //Tildeler farger ettersom hvilken state trafikklyset er i.
         switch (trafficState) {
         case 0: //rødt lys y
             hOrg = SelectObject(hdc, rod);
-            Ellipse(hdc, 400, 100, 425, 125);
+            Ellipse(hdc, yRed.left, yRed.top, yRed.right, yRed.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 125, 425, 150);
+            Ellipse(hdc, yYellow.left, yYellow.top, yYellow.right, yYellow.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 150, 425, 175);
+            Ellipse(hdc, yGreen.left, yGreen.top, yGreen.right, yGreen.bottom);
 
             // grønt x akse
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 350, 275, 375, 300);
+            Ellipse(hdc, xRed.left, xRed.top, xRed.right, xRed.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 375, 275, 400, 300);
+            Ellipse(hdc, xYellow.left, xYellow.top, xYellow.right, xYellow.bottom);
 
             hOrg = SelectObject(hdc, gronn);
-            Ellipse(hdc, 400, 275, 425, 300);
+            Ellipse(hdc, xGreen.left, xGreen.top, xGreen.right, xGreen.bottom);
 
 
             break;
         case 1: //rødt/gult lys y akse
             hOrg = SelectObject(hdc, rod);
-            Ellipse(hdc, 400, 100, 425, 125);
+            Ellipse(hdc, yRed.left, yRed.top, yRed.right, yRed.bottom);
 
             hOrg = SelectObject(hdc, gul);
-            Ellipse(hdc, 400, 125, 425, 150);
+            Ellipse(hdc, yYellow.left, yYellow.top, yYellow.right, yYellow.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 150, 425, 175);
+            Ellipse(hdc, yGreen.left, yGreen.top, yGreen.right, yGreen.bottom);
 
             // gult x akse
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 350, 275, 375, 300);
+            Ellipse(hdc, xRed.left, xRed.top, xRed.right, xRed.bottom);
 
             hOrg = SelectObject(hdc, gul);
-            Ellipse(hdc, 375, 275, 400, 300);
+            Ellipse(hdc, xYellow.left, xYellow.top, xYellow.right, xYellow.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 275, 425, 300);
+            Ellipse(hdc, xGreen.left, xGreen.top, xGreen.right, xGreen.bottom);
             
             break;
         case 2: //gult lys y akse
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 100, 425, 125);
+            Ellipse(hdc, yRed.left, yRed.top, yRed.right, yRed.bottom);
 
             hOrg = SelectObject(hdc, gul);
-            Ellipse(hdc, 400, 125, 425, 150);
+            Ellipse(hdc, yYellow.left, yYellow.top, yYellow.right, yYellow.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 150, 425, 175);
+            Ellipse(hdc, yGreen.left, yGreen.top, yGreen.right, yGreen.bottom);
 
             // rødt x akse
             hOrg = SelectObject(hdc, rod);
-            Ellipse(hdc, 350, 275, 375, 300);
+            Ellipse(hdc, xRed.left, xRed.top, xRed.right, xRed.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 375, 275, 400, 300);
+            Ellipse(hdc, xYellow.left, xYellow.top, xYellow.right, xYellow.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 275, 425, 300);
+            Ellipse(hdc, xGreen.left, xGreen.top, xGreen.right, xGreen.bottom);
             break;
         case 3: // grønt lys y akse
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 100, 425, 125);
+            Ellipse(hdc, yRed.left, yRed.top, yRed.right, yRed.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 125, 425, 150);
-            
+            Ellipse(hdc, yYellow.left, yYellow.top, yYellow.right, yYellow.bottom);
             
             hOrg = SelectObject(hdc, gronn);
-            Ellipse(hdc, 400, 150, 425, 175);
+            Ellipse(hdc, yGreen.left, yGreen.top, yGreen.right, yGreen.bottom);
            
             //rødt Trafikklys x akse;
 
             hOrg = SelectObject(hdc, rod);
-            Ellipse(hdc, 350, 275, 375, 300);
+            Ellipse(hdc, xRed.left, xRed.top, xRed.right, xRed.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 375, 275, 400, 300);
+            Ellipse(hdc, xYellow.left, xYellow.top, xYellow.right, xYellow.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 275, 425, 300);
+            Ellipse(hdc, xGreen.left, xGreen.top, xGreen.right, xGreen.bottom);
 
 
             break;
         case 4:
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 100, 425, 125);
+            Ellipse(hdc, yRed.left, yRed.top, yRed.right, yRed.bottom);
 
             hOrg = SelectObject(hdc, gul);
-            Ellipse(hdc, 400, 125, 425, 150);
+            Ellipse(hdc, yYellow.left, yYellow.top, yYellow.right, yYellow.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 150, 425, 175);
+            Ellipse(hdc, yGreen.left, yGreen.top, yGreen.right, yGreen.bottom);
 
             //rødt Trafikklys x akse;
 
             hOrg = SelectObject(hdc, rod);
-            Ellipse(hdc, 350, 275, 375, 300);
+            Ellipse(hdc, xRed.left, xRed.top, xRed.right, xRed.bottom);
 
             hOrg = SelectObject(hdc, gul);
-            Ellipse(hdc, 375, 275, 400, 300);
+            Ellipse(hdc, xYellow.left, xYellow.top, xYellow.right, xYellow.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 275, 425, 300);
+            Ellipse(hdc, xGreen.left, xGreen.top, xGreen.right, xGreen.bottom);
 
             break;
 
         case 5:
 
             hOrg = SelectObject(hdc, rod);
-            Ellipse(hdc, 400, 100, 425, 125);
+            Ellipse(hdc, yRed.left, yRed.top, yRed.right, yRed.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 125, 425, 150);
-
+            Ellipse(hdc, yYellow.left, yYellow.top, yYellow.right, yYellow.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 150, 425, 175);
+            Ellipse(hdc, yGreen.left, yGreen.top, yGreen.right, yGreen.bottom);
 
             //rødt Trafikklys x akse;
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 350, 275, 375, 300);
+            Ellipse(hdc, xRed.left, xRed.top, xRed.right, xRed.bottom);
 
             hOrg = SelectObject(hdc, gul);
-            Ellipse(hdc, 375, 275, 400, 300);
+            Ellipse(hdc, xYellow.left, xYellow.top, xYellow.right, xYellow.bottom);
 
             hOrg = SelectObject(hdc, blank);
-            Ellipse(hdc, 400, 275, 425, 300);
+            Ellipse(hdc, xGreen.left, xGreen.top, xGreen.right, xGreen.bottom);
 
             break;
 

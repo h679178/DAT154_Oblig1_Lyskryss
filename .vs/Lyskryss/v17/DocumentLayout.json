@@ -5,6 +5,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{1E254D6A-DF61-45DC-A7E9-4A059EB782D2}|Lyskryss\\Lyskryss.vcxproj|C:\\dev\\Lyskryss\\Lyskryss\\Lyskryss.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1E254D6A-DF61-45DC-A7E9-4A059EB782D2}|Lyskryss\\Lyskryss.vcxproj|solutionrelative:Lyskryss\\Lyskryss.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E254D6A-DF61-45DC-A7E9-4A059EB782D2}|Lyskryss\\Lyskryss.vcxproj|C:\\dev\\Lyskryss\\Lyskryss\\Lyskryss.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1E254D6A-DF61-45DC-A7E9-4A059EB782D2}|Lyskryss\\Lyskryss.vcxproj|solutionrelative:Lyskryss\\Lyskryss.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E254D6A-DF61-45DC-A7E9-4A059EB782D2}|Lyskryss\\Lyskryss.vcxproj|C:\\dev\\Lyskryss\\Lyskryss\\Resource.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1E254D6A-DF61-45DC-A7E9-4A059EB782D2}|Lyskryss\\Lyskryss.vcxproj|solutionrelative:Lyskryss\\Resource.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,13 +34,37 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Resource.h",
+              "DocumentMoniker": "C:\\dev\\Lyskryss\\Lyskryss\\Resource.h",
+              "RelativeDocumentMoniker": "Lyskryss\\Resource.h",
+              "ToolTip": "C:\\dev\\Lyskryss\\Lyskryss\\Resource.h",
+              "RelativeToolTip": "Lyskryss\\Resource.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-02-20T13:48:25.73Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Lyskryss.h",
+              "DocumentMoniker": "C:\\dev\\Lyskryss\\Lyskryss\\Lyskryss.h",
+              "RelativeDocumentMoniker": "Lyskryss\\Lyskryss.h",
+              "ToolTip": "C:\\dev\\Lyskryss\\Lyskryss\\Lyskryss.h",
+              "RelativeToolTip": "Lyskryss\\Lyskryss.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-02-20T13:47:59.815Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Lyskryss.cpp",
               "DocumentMoniker": "C:\\dev\\Lyskryss\\Lyskryss\\Lyskryss.cpp",
               "RelativeDocumentMoniker": "Lyskryss\\Lyskryss.cpp",
               "ToolTip": "C:\\dev\\Lyskryss\\Lyskryss\\Lyskryss.cpp",
               "RelativeToolTip": "Lyskryss\\Lyskryss.cpp",
-              "ViewState": "AgIAAJYAAAAAAAAAAAAAAJ8AAABGAAAAAAAAAA==",
+              "ViewState": "AgIAAOcAAAAAAAAAAAAAANEAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-02-19T10:45:06.509Z",
               "EditorCaption": ""

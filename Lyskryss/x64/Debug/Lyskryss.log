@@ -1,5 +1,5 @@
 ﻿  Lyskryss.cpp
-C:\dev\Lyskryss\Lyskryss\Lyskryss.cpp(304,46): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\dev\Lyskryss\Lyskryss\Lyskryss.cpp(305,46): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\dev\Lyskryss\Lyskryss\Lyskryss.cpp(306,48): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\dev\Lyskryss\Lyskryss\Lyskryss.cpp(288,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\dev\Lyskryss\Lyskryss\Lyskryss.cpp(289,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\dev\Lyskryss\Lyskryss\Lyskryss.cpp(290,48): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   Lyskryss.vcxproj -> C:\dev\Lyskryss\x64\Debug\Lyskryss.exe
